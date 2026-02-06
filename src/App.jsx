@@ -341,7 +341,7 @@ useEffect(() => {
             </select>
 
             <select value={filterVibe} onChange={(e) => setFilterVibe(e.target.value)}>
-              <option value="All">All vibes</option>
+              <option value="All">All tags</option>
               {VIBES.map((v) => (
                 <option key={v} value={v}>
                   {v}
