@@ -24,6 +24,18 @@ import mod3 from "./assets/styles/modern/mod3.jpg";
 
 import audio from "./assets/audio/lofi.mp3";
 
+import ana1 from "./assets/anatomy/ana1.jpg";
+import ana2 from "./assets/anatomy/ana2.jpg";
+
+import col1 from "./assets/color/col1.jpg";
+
+import lig1 from "./assets/lighting/lig1.jpg";
+
+const COLOR_IMAGES = [col1];
+
+const LIGHTING_IMAGES = [lig1];
+
+const ANATOMY_IMAGES = [ana1, ana2];
 
 const STYLE_OPTIONS = [
   { key: "none", name: "None" },
@@ -63,6 +75,17 @@ function newId() {
 }
 
 export default function App() {
+
+  const REFERENCE_TYPES = [
+  { key: "none", name: "None" },
+  { key: "styles", name: "Art Styles" },
+  { key: "anatomy", name: "Anatomy" },
+  { key: "color", name: "Color" },
+  { key: "lighting", name: "Lighting" },
+];
+
+const [refType, setRefType] = useState("none");
+
   const [styleKey, setStyleKey] = useState("none");
   const styleImages = STYLE_IMAGES[styleKey] ?? [];
   
@@ -273,7 +296,7 @@ useEffect(() => {
             </div>
 
             <div className="vibes">
-              <div className="label">Vibes</div>
+              <div className="label">Tags</div>
               <div className="chips">
                 {VIBES.map((v) => (
                   <button
@@ -305,7 +328,7 @@ useEffect(() => {
               className="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search title or vibes…"
+              placeholder="Search title or tags..."
             />
 
             <select value={filterMedium} onChange={(e) => setFilterMedium(e.target.value)}>
@@ -450,28 +473,76 @@ useEffect(() => {
   <audio ref={audioRef} src={audio} loop />
 </div>
 
-  <h3>Style reference</h3>
+  <div style={{ marginTop: 14 }}>
+  <h3>References</h3>
 
-  <label style={{ marginTop: 8 }}>
-    Art style
-    <select value={styleKey} onChange={(e) => setStyleKey(e.target.value)}>
-      {STYLE_OPTIONS.map((opt) => (
-        <option key={opt.key} value={opt.key}>
-          {opt.name}
-        </option>
-      ))}
-    </select>
-  </label>
+  <div className="refTopRow">
+    <label>
+      References
+      <select value={refType} onChange={(e) => setRefType(e.target.value)}>
+        {REFERENCE_TYPES.map((opt) => (
+          <option key={opt.key} value={opt.key}>
+            {opt.name}
+          </option>
+        ))}
+      </select>
+    </label>
 
-  {styleKey !== "none" && (
+    {refType === "styles" && (
+      <label>
+        Art Styles
+        <select value={styleKey} onChange={(e) => setStyleKey(e.target.value)}>
+          {STYLE_OPTIONS.map((opt) => (
+            <option key={opt.key} value={opt.key}>
+              {opt.name}
+            </option>
+          ))}
+        </select>
+      </label>
+    )}
+  </div>
+
+  {refType === "styles" && styleKey !== "none" && (
     <div className="refGrid">
       {styleImages.map((src, idx) => (
-        <div className="refCard" key={`${styleKey}-${idx}`}>
-          <img className="refImg" src={src} alt={`${styleKey} reference ${idx + 1}`} />
+        <div className="refCard" key={`style-${styleKey}-${idx}`}>
+          <img className="refImg" src={src} alt={`style reference ${idx + 1}`} />
         </div>
       ))}
     </div>
   )}
+
+  {refType === "anatomy" && (
+    <div className="refGrid">
+      {ANATOMY_IMAGES.map((src, idx) => (
+        <div className="refCard" key={`anat-${idx}`}>
+          <img className="refImg" src={src} alt={`anatomy reference ${idx + 1}`} />
+        </div>
+      ))}
+    </div>
+  )}
+
+  {refType === "color" && (
+  <div className="refGrid">
+    {COLOR_IMAGES.map((src, idx) => (
+      <div className="refCard" key={`color-${idx}`}>
+        <img className="refImg" src={src} alt={`color reference ${idx + 1}`} />
+      </div>
+    ))}
+  </div>
+)}
+
+  {refType === "lighting" && (
+  <div className="refGrid">
+    {LIGHTING_IMAGES.map((src, idx) => (
+      <div className="refCard" key={`light-${idx}`}>
+        <img className="refImg" src={src} alt={`lighting reference ${idx + 1}`} />
+      </div>
+    ))}
+  </div>
+)}
+</div>
+
 </div>
 
               </div>
